@@ -87,8 +87,10 @@ const Content = styled(DialogContent)`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  animation: ${slideIn} 300ms both cubic-bezier(0.17, 0.67, 0.39, 1);
-  animation-delay: 100ms;
+  @media (prefers-reduced-motion: no-preference) {
+    animation: ${slideIn} 300ms both cubic-bezier(0.17, 0.67, 0.39, 1);
+    animation-delay: 100ms;
+  }
 `;
 
 const CloseButton = styled(UnstyledButton)`
