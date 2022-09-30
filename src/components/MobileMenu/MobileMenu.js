@@ -1,17 +1,18 @@
 /* eslint-disable no-unused-vars */
-import React from 'react';
-import styled from 'styled-components/macro';
-import { DialogOverlay, DialogContent } from '@reach/dialog';
+import React from "react";
+import styled, { keyframes } from "styled-components/macro";
+import { DialogOverlay, DialogContent } from "@reach/dialog";
 
-import { QUERIES, WEIGHTS } from '../../constants';
+import { QUERIES, WEIGHTS } from "../../constants";
 
-import UnstyledButton from '../UnstyledButton';
-import Icon from '../Icon';
-import VisuallyHidden from '../VisuallyHidden';
+import UnstyledButton from "../UnstyledButton";
+import Icon from "../Icon";
+import VisuallyHidden from "../VisuallyHidden";
 
-const MobileMenu = ({ isOpen, onDismiss }) => {
+export default function MobileMenu({ isOpen, onDismiss }) {
   return (
     <Overlay isOpen={isOpen} onDismiss={onDismiss}>
+      <Backdrop />
       <Content aria-label="Menu">
         <CloseButton onClick={onDismiss}>
           <Icon id="close" />
@@ -26,6 +27,8 @@ const MobileMenu = ({ isOpen, onDismiss }) => {
           <NavLink href="/kids">Kids</NavLink>
           <NavLink href="/collections">Collections</NavLink>
         </Nav>
+        <Filler />
+
         <Footer>
           <SubLink href="/terms">Terms and Conditions</SubLink>
           <SubLink href="/privacy">Privacy Policy</SubLink>
@@ -34,7 +37,25 @@ const MobileMenu = ({ isOpen, onDismiss }) => {
       </Content>
     </Overlay>
   );
-};
+}
+
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+`;
+
+const slideIn = keyframes`
+  from { 
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+`;
 
 const Overlay = styled(DialogOverlay)`
   position: fixed;
@@ -42,60 +63,74 @@ const Overlay = styled(DialogOverlay)`
   left: 0;
   right: 0;
   bottom: 0;
-  background: var(--color-backdrop);
+  background: transparent;
   display: flex;
   justify-content: flex-end;
 `;
 
+const Backdrop = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--color-backdrop);
+  animation: ${fadeIn} 200ms ease-in-out;
+`;
+
 const Content = styled(DialogContent)`
-  background: white;
+  position: relative;
   width: 300px;
   height: 100%;
-  padding: 24px 32px;
+  background: white;
+  padding: 32px;
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
+  animation: ${slideIn} 300ms both cubic-bezier(0.17, 0.67, 0.39, 1);
+  animation-delay: 100ms;
 `;
 
 const CloseButton = styled(UnstyledButton)`
   position: absolute;
-  top: 10px;
-  right: 0;
-  padding: 16px;
+  top: 32px;
+  right: 32px;
+`;
+
+const Filler = styled.div`
+  flex: 1;
 `;
 
 const Nav = styled.nav`
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  animation: ${fadeIn} 300ms both;
+  animation-delay: 100ms;
 `;
 
 const NavLink = styled.a`
   color: var(--color-gray-900);
-  font-weight: ${WEIGHTS.medium};
   text-decoration: none;
   font-size: 1.125rem;
-  text-transform: uppercase;
+  font-weight: ${WEIGHTS.medium};
+  line-height: 2rem;
+  padding: 8px 0;
 
   &:first-of-type {
     color: var(--color-secondary);
   }
 `;
 
-const Filler = styled.div`
-  flex: 1;
-`;
 const Footer = styled.footer`
-  flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  justify-content: flex-end;
+  gap: 16px;
 `;
 
 const SubLink = styled.a`
   color: var(--color-gray-700);
-  font-size: 0.875rem;
   text-decoration: none;
+  font-size: ${14 / 16}rem;
+  font-weight: ${WEIGHTS.medium};
+  line-height: 1.125rem;
 `;
-
-export default MobileMenu;
