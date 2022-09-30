@@ -6,7 +6,7 @@ export default function NavLink({ children, ...props }) {
   return (
     <Wrapper {...props}>
       <MainText>{children}</MainText>
-      <HoverText>{children}</HoverText>
+      <HoverText aria-hidden={true}>{children}</HoverText>
     </Wrapper>
   );
 }
